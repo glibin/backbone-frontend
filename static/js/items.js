@@ -88,10 +88,11 @@ $(function() {
             'dblclick': 'edit'
         },
         template: _.template($('#post-item').html()),
-        initialize: function() {
+        initialize: function(options) {
             _.bindAll(this, 'removeItem', 'remove', 'edit', 'changeText');
             this.listenTo(this.model, 'destroy', this.remove);
             this.listenTo(this.model, 'change:text', this.changeText);
+            this.userId = options.userId;
         },
         changeText: function(model, value) {
             this.$('.post-item__text').text(value);
@@ -103,7 +104,9 @@ $(function() {
             this.model.destroy({wait: true});
         },
         render: function() {
-            this.$el.html(this.template(this.model.toJSON()));
+            var data = this.model.toJSON();
+            data.userId = this.userId;
+            this.$el.html(this.template(data));
             this.$el.css('background-image', 'url(https://graph.facebook.com/' + this.model.get('author_id') + '/picture)');
             return this;
         }
@@ -118,10 +121,11 @@ $(function() {
             'submit .add-post': 'addPost',
             'reset .add-post': 'resetPost'
         },
-        initialize: function() {
+        initialize: function(options) {
             this.items = new Post.Collection();
             _.bindAll(this, 'render', 'addOne', 'addPost', 'resetPost');
             this.items.bind("all", this.render);
+            this.userId = options.userId;
         },
         getEditing: function() {
             return this.items.find(function(item) {
@@ -163,7 +167,8 @@ $(function() {
         addOne: function(model) {
             //console.log(model.get('text'));
             var view = new Post.View({
-                model: model
+                model: model,
+                userId: this.userId
             });
             //console.log(this.items.models);
             if (this.items.indexOf(model) === 0) {

@@ -28,7 +28,9 @@
     <div class="post-item__text">
         <%- text %>
     </div>
+    <% if (userId == author_id) { %>
     <span class="post-item__remove">&times;</span>
+    <% } %>
 </script>
 
 <script type="text/template" id="paging">

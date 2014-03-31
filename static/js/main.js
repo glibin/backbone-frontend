@@ -9,9 +9,10 @@
     };
 
     $(function() {
-        Auth.once('success', function() {
+        Auth.once('success', function(userId) {
             var postsView = new Post.All.View({
-                el: $('.content')[0]
+                el: $('.content')[0],
+                userId: userId
             });
             postsView.items.fetch({reset: true});
         });
