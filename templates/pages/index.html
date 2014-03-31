@@ -23,7 +23,7 @@
 
 <script type="text/template" id="post-item">
     <div class="post-item-author">
-        <%- author_id %>
+        <%- author.name %>
     </div>
     <div class="post-item__text">
         <%- text %>
@@ -47,7 +47,9 @@
 <script src="{{ static_url('js/underscore.js') }}"></script>
 <script src="{{ static_url('js/backbone.js') }}"></script>
 <script src="{{ static_url('js/auth.js') }}"></script>
+<script src="{{ static_url('js/authors.js') }}"></script>
 <script src="{{ static_url('js/items.js') }}"></script>
+<script src="{{ static_url('js/poll.js') }}"></script>
 
 
 

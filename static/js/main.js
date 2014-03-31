@@ -10,11 +10,22 @@
 
     $(function() {
         Auth.once('success', function(userId) {
-            var postsView = new Post.All.View({
-                el: $('.content')[0],
-                userId: userId
-            });
-            postsView.items.fetch({reset: true});
+            var authors = new Author.Collection();
+            authors.fetch({'success': function() {
+                var postsView = new Post.All.View({
+                    el: $('.content')[0],
+                    userId: userId,
+                    authors: authors,
+                    poller: new Poller()
+                });
+                postsView.items.fetch({reset: true});
+            }});
+
+//            poller.on('new', function(data) {
+//                if (data.author_id != userId) {
+//
+//                }
+//            });
         });
         Auth.check();
     });

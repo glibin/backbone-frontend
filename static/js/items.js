@@ -51,6 +51,14 @@ $(function() {
         defaults: {
             'type': 'text',
             'editing': false
+        },
+        initialize: function() {
+            //this.get('params'); // {'name': '', 'id': 1}
+            this.params = new Backbone.Model(this.get('params'));
+            this.on('change:params', function(model, changed) {
+                this.params.set(changed);
+            }.bind(this));
+            //this.author = new Backbone.Model
         }
     });
 
@@ -76,7 +84,7 @@ $(function() {
             return data.data;
         },
         comparator: function(a, b) {
-            return a.get('date') > b.get('date') ? -1 : 1;
+            return a.get('date') != b.get('date') ? (a.get('date') > b.get('date') ? -1 : 1) : 0;
         }
     });
 
@@ -91,14 +99,18 @@ $(function() {
         initialize: function(options) {
             _.bindAll(this, 'removeItem', 'remove', 'edit', 'changeText');
             this.listenTo(this.model, 'destroy', this.remove);
+            this.listenTo(this.model, 'remove', this.remove);
             this.listenTo(this.model, 'change:text', this.changeText);
             this.userId = options.userId;
+            this.author = options.author;
         },
         changeText: function(model, value) {
             this.$('.post-item__text').text(value);
         },
         edit: function() {
-            this.model.set({'editing': true});
+            if (this.model.get('author_id') == this.userId) {
+                this.model.set({'editing': true});
+            }
         },
         removeItem: function() {
             this.model.destroy({wait: true});
@@ -106,6 +118,7 @@ $(function() {
         render: function() {
             var data = this.model.toJSON();
             data.userId = this.userId;
+            data.author = this.author;
             this.$el.html(this.template(data));
             this.$el.css('background-image', 'url(https://graph.facebook.com/' + this.model.get('author_id') + '/picture)');
             return this;
@@ -126,6 +139,26 @@ $(function() {
             _.bindAll(this, 'render', 'addOne', 'addPost', 'resetPost');
             this.items.bind("all", this.render);
             this.userId = options.userId;
+            this.authors = options.authors;
+
+            options.poller.on('new', function(data) {
+                if (this.items.paging.get('page') === 1) {
+                    this.items.add(data, {'at': 0});
+                }
+            }.bind(this));
+
+            options.poller.on('delete', function(data) {
+                if (this.items.paging.get('page') === 1) {
+                    var model = this.items.get(data);
+                    this.items.remove(model);
+                }
+            }.bind(this));
+
+            options.poller.on('edit', function(data) {
+                if (this.items.paging.get('page') === 1) {
+                    this.items.add(data, {merge: true});
+                }
+            }.bind(this));
         },
         getEditing: function() {
             return this.items.find(function(item) {
@@ -168,7 +201,8 @@ $(function() {
             //console.log(model.get('text'));
             var view = new Post.View({
                 model: model,
-                userId: this.userId
+                userId: this.userId,
+                author: this.authors.get(model.get('author_id')).toJSON()
             });
             //console.log(this.items.models);
             if (this.items.indexOf(model) === 0) {
