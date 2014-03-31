@@ -12,7 +12,7 @@
                     if (!data.authed) {
                         window.location.href = Config.baseUrl + '/?backurl=' + encodeURI(Config.selfUrl);
                     } else {
-                        this.trigger('success');
+                        this.trigger('success', data.id);
                     }
                 }.bind(this),
                 error: function() {

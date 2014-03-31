@@ -3,6 +3,7 @@
 <script>
     var Config = {
         'baseUrl': 'http://backbone.questworld.ru',
+        'subscribeHost': 'backbone.questworld.ru',
         'selfUrl': 'http://127.0.0.1:8080'
     }
 </script>
@@ -14,23 +15,29 @@
     <form method="post" class="add-post">
         <input type="hidden" name="post_id" />
         <textarea name="post_text" cols="20" rows="7"></textarea><br />
-        <input type="submit" value="Add post">
-        <input type="reset" value="Cancel">
+        <input class="button" type="submit" value="Add post">
+        <input class="button" type="reset" value="Cancel">
     </form>
 
 </script>
 
 <script type="text/template" id="post-item">
-    <span class="post-item__text"><%- text %></span> <span class="post-item__remove">&times;</span>
+    <div class="post-item-author">
+        <%- author_id %>
+    </div>
+    <div class="post-item__text">
+        <%- text %>
+    </div>
+    <span class="post-item__remove">&times;</span>
 </script>
 
 <script type="text/template" id="paging">
     <% if (page > 1) { %>
-    <button type="button" class="prev">&larr;</button>
+    <button type="button" class="paging-button prev">&larr;</button>
     <% } %>
     <span><%- page %> / <%- pages %></span>
     <% if (page < pages) { %>
-    <button type="button" class="next">&rarr;</button>
+    <button type="button" class="paging-button next">&rarr;</button>
     <% } %>
 </script>
 

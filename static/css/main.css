@@ -1,0 +1,66 @@
+.posts {
+    padding: 0 10px;
+}
+
+.post-item {
+    display: block;
+    position: relative;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 60px;
+    min-height: 60px;
+}
+
+.post-item:last-child {
+    border-bottom: 0;
+}
+
+    .post-item__remove {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        cursor: pointer;
+    }
+
+.post-item-author {
+    padding: 5px 0;
+    color: gray;
+}
+
+.paging {
+    padding: 10px;
+    background-color: #fbfbfb;
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+}
+
+.paging-button {
+    border: none;
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.add-post {
+    padding: 10px;
+}
+
+.button {
+    font-size: 12px;
+    display: inline-block;
+    margin-left: 0;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 2px;
+    color: white !important;
+    vertical-align: baseline;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #0099ff;
+    text-align: center;
+    outline: none;
+}

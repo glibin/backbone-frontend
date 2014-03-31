@@ -85,7 +85,7 @@ $(function() {
         className: 'post-item',
         events: {
             'click .post-item__remove': 'removeItem',
-            'dblclick .post-item__text': 'edit'
+            'dblclick': 'edit'
         },
         template: _.template($('#post-item').html()),
         initialize: function() {
@@ -104,6 +104,7 @@ $(function() {
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
+            this.$el.css('background-image', 'url(https://graph.facebook.com/' + this.model.get('author_id') + '/picture)');
             return this;
         }
     });
@@ -150,6 +151,7 @@ $(function() {
                 this.items.create({
                     'text': text
                 }, {
+                    'wait': true,
                     'success': function() {
                         this.$form[0].reset();
                     }.bind(this),
@@ -191,7 +193,7 @@ $(function() {
                     if (m) {
                         m.set({'editing': false});
                     }
-                    this.$('[name=post_text]').val(model.get('text'));
+                    this.$('[name=post_text]').val(model.get('text')).focus();
                 }
 
             }
